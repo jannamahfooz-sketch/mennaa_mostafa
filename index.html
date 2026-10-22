@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>حكايتنا سوا ❤️</title>
+    <!-- خطوط جوجل العربية الأنيقة -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@500;700;800&display=swap" rel="stylesheet">
+    <!-- مكتبة الأيقونات -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-pink: #ff758f;
+            --deep-rose: #c9184a;
+            --soft-bg: #ffe5ec;
+            --card-glass: rgba(255, 255, 255, 0.88);
+            --border-pink: #ffccd5;
+            --shadow-soft: 0 10px 25px rgba(255, 117, 143, 0.25);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', 'Tajawal', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: linear-gradient(180deg, #ffe5ec 0%, #fff0f3 50%, #ffe5ec 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* تساقط وتطاير القلوب في الخلفية */
+        .hearts-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .floating-heart {
+            position: absolute;
+            bottom: -50px;
+            color: rgba(255, 117, 143, 0.4);
+            animation: floatUp 7s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0; }
+            15% { opacity: 0.9; }
+            85% { opacity: 0.9; }
+            100% { transform: translateY(-110vh) rotate(360deg) scale(1.3); opacity: 0; }
+        }
+
+        /* حاوية العرض المتناسقة مع الهاتف */
+        .mobile-wrapper {
+            width: 100%;
+            max-width: 440px;
+            min-height: 100vh;
+            padding: 20px 16px 120px 16px;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ================= 1. شاشة القفل ================= */
+        #lockScreen {
+            width: 100%;
+            min-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.5s ease;
+        }
+
+        .heart-shape-card {
+            background: var(--card-glass);
+            backdrop-filter: blur(12px);
+            border: 2px solid var(--border-pink);
+            border-radius: 45px;
+            padding: 40px 24px;
+            width: 100%;
+            text-align: center;
+            box-shadow: var(--shadow-soft);
+            position: relative;
+        }
+
+        .avatar-box {
+            width: 105px;
+            height: 105px;
+            border-radius: 50%;
+            border: 3.5px solid var(--primary-pink);
+            margin: 0 auto 15px auto;
+            overflow: hidden;
+            box-shadow: 0 6px 15px rgba(255, 117, 143, 0.35);
+            animation: pulseAvatar 2.5s infinite ease-in-out;
+        }
+
+        @keyframes pulseAvatar {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .avatar-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .lock-title {
+            color: #590d22;
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .lock-sub {
+            color: var(--deep-rose);
+            font-size: 15px;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        .pass-input {
+            width: 85%;
+            padding: 13px 20px;
+            border-radius: 30px;
+            border: 1.5px solid #ffb3c1;
+            outline: none;
+            text-align: center;
+            font-size: 16px;
+            background: rgba(255,255,255,0.9);
+            color: #333;
+            margin-bottom: 20px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+            transition: 0.3s;
+        }
+
+        .pass-input:focus {
+            border-color: var(--deep-rose);
+            box-shadow: 0 0 12px rgba(201, 24, 74, 0.25);
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #ff758f, #c9184a);
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 30px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(201, 24, 74, 0.3);
+            transition: 0.2s transform;
+        }
+
+        .action-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* ================= 2. شاشة الآلة الكاتبة ================= */
+        #typingScreen {
+            display: none;
+            width: 100%;
+            min-height: 80vh;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .glass-box {
+            background: var(--card-glass);
+            backdrop-filter: blur(12px);
+            border-radius: 35px;
+            border: 2px solid var(--border-pink);
+            padding: 35px 24px;
+            width: 100%;
+            text-align: center;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .glass-box h2 {
+            color: var(--deep-rose);
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .type-content {
+            color: #590d22;
+            font-size: 17px;
+            line-height: 1.9;
+            min-height: 120px;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        /* ================= 3. الشاشة الرئيسية والذكريات ================= */
+        #mainTimeline {
+            display: none;
+            width: 100%;
+            flex-direction: column;
+            gap: 22px;
+            animation: fadeIn 0.8s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-custom {
+            background: var(--card-glass);
+            border-radius: 28px;
+            border: 1.5px solid var(--border-pink);
+            padding: 20px;
+            box-shadow: var(--shadow-soft);
+            text-align: center;
+            position: relative;
+        }
+
+        /* عدّاد الأيام والوقت */
+        .counter-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin: 18px 0;
+        }
+
+        .counter-col {
+            background: #ffffff;
+            border: 1.5px solid #ffccd5;
+            border-radius: 18px;
+            padding: 10px 4px;
+            box-shadow: 0 4px 10px rgba(255, 175, 189, 0.25);
+        }
+
+        .counter-col .val {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--deep-rose);
+        }
+
+        .counter-col .unit {
+            font-size: 11px;
+            color: #800f2f;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        .badge-pill {
+            background: #ffe5ec;
+            color: var(--deep-rose);
+            border-radius: 25px;
+            padding: 8px 20px;
+            display: inline-block;
+            font-weight: 700;
+            font-size: 14px;
+            margin-top: 6px;
+            border: 1px solid #ffb3c1;
+        }
+
+        /* بطاقات الوسائط (الصور والفيديوهات) */
+        .media-frame {
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+            margin-bottom: 12px;
+            background: #000;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .media-frame img, .media-frame video {
+            width: 100%;
+            height: auto;
+            max-height: 420px;
+            object-fit: cover;
+            display: block;
+            transition: 0.3s transform;
+        }
+
+        .media-frame:hover img {
+            transform: scale(1.02);
+        }
+
+        .caption-text {
+            background: #fff;
+            padding: 12px 16px;
+            border-radius: 20px;
+            color: #800f2f;
+            font-weight: 700;
+            font-size: 15px;
+            border: 1px solid #ffe5ec;
+            display: inline-block;
+            width: 100%;
+        }
+
+        /* بطاقة الوعود والكلام الطويل */
+        .promises-card {
+            text-align: right;
+            line-height: 2;
+            color: #590d22;
+            font-size: 14.5px;
+            font-weight: 600;
+        }
+
+        .promises-card p {
+            margin-bottom: 8px;
+            padding-right: 5px;
+        }
+
+        /* زر الرسالة المنبثقة التفاعلي */
+        .message-trigger-btn {
+            background: linear-gradient(135deg, #ff4d6d, #c9184a);
+            color: #fff;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 35px;
+            font-size: 17px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(201, 24, 74, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px auto;
+            animation: heartbeat 1.8s infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.04); }
+        }
+
+        /* نافذة المودال */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: #fff;
+            border-radius: 35px;
+            border: 2px solid var(--primary-pink);
+            padding: 35px 25px;
+            max-width: 380px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        @keyframes modalPop {
+            from { transform: scale(0.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .close-modal-btn {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #ffe5ec;
+            border: none;
+            color: var(--deep-rose);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /* ================= 4. مشغل الصوت العائم ================= */
+        .sticky-player {
+            position: fixed;
+            bottom: 12px;
+            width: calc(100% - 32px);
+            max-width: 410px;
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(15px);
+            border: 1.5px solid var(--border-pink);
+            border-radius: 40px;
+            padding: 10px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 12px 30px rgba(255, 117, 143, 0.35);
+            z-index: 1000;
+        }
+
+        .player-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .rotating-disc {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary-pink);
+            animation: rotateDisc 7s linear infinite;
+            animation-play-state: paused;
+        }
+
+        @keyframes rotateDisc {
+            100% { transform: rotate(360deg); }
+        }
+
+        .song-details {
+            text-align: right;
+        }
+
+        .song-title {
+            font-size: 13.5px;
+            font-weight: 800;
+            color: #590d22;
+        }
+
+        .song-timer {
+            font-size: 11px;
+            color: var(--deep-rose);
+            direction: ltr;
+        }
+
+        .play-btn-circle {
+            background: linear-gradient(135deg, #ff758f, #c9184a);
+            color: #fff;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(201, 24, 74, 0.35);
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- القلوب المتطايرة في الخلفية -->
+    <div class="hearts-bg" id="heartsBackground"></div>
+
+    <div class="mobile-wrapper">
+
+        <!-- ================= 1. شاشة القفل ================= -->
+        <div id="lockScreen">
+            <div class="heart-shape-card">
+                <div class="avatar-box">
+                    <img src="WhatsApp Image 2026-10-21 at 7.50.14 PM.jpeg" alt="Avatar">
+                </div>
+                <h2 class="lock-title">جاهزه 😉</h2>
+                <p class="lock-sub">كل الي بينا هنا 😍</p>
+                <div>
+                    <input type="password" id="passCode" class="pass-input" placeholder="Password">
+                </div>
+                <button class="action-btn" onclick="unlockPage()">Unlock 💖</button>
+            </div>
+        </div>
+
+        <!-- ================= 2. شاشة الآلة الكاتبة ================= -->
+        <div id="typingScreen">
+            <div class="glass-box">
+                <h2>ينور عيني ❤️</h2>
+                <div class="type-content" id="typewriterTarget"></div>
+                <button class="action-btn" id="nextToTimelineBtn" style="display: none;" onclick="goToTimeline()">next 💖</button>
+            </div>
+        </div>
+
+        <!-- ================= 3. الشاشة الرئيسية والألبوم الكامل ================= -->
+        <div id="mainTimeline">
+
+            <!-- كارت صورة الغلاف الترحيبية -->
+            <div class="card-custom">
+                <div class="media-frame">
+                    <img src="WhatsApp Image 2026-10-21 at 8.14.11 PM (3).jpeg" alt="Cover">
+                </div>
+                <div class="badge-pill">بحبك ❤️</div>
+            </div>
+
+            <!-- كارت عدّاد الوقت المباشر -->
+            <div class="card-custom">
+                <h3 style="color: var(--deep-rose); font-weight:800; font-size:22px;">بدايتنا 💖</h3>
+                <p style="color: #800f2f; font-size:13px; font-weight:600; margin-top:4px;">سوا من: 1-12-2020</p>
+                
+                <div class="counter-grid">
+                    <div class="counter-col">
+                        <div class="val" id="d-val">00</div>
+                        <div class="unit">يوم</div>
+                    </div>
+                    <div class="counter-col">
+                        <div class="val" id="h-val">00</div>
+                        <div class="unit">ساعة</div>
+                    </div>
+                    <div class="counter-col">
+                        <div class="val" id="m-val">00</div>
+                        <div class="unit">دقيقة</div>
+                    </div>
+                    <div class="counter-col">
+                        <div class="val" id="s-val">00</div>
+                        <div class="unit">ثانية</div>
+                    </div>
+                </div>
+                <p style="color:#ff4d6d; font-size:13px; font-weight:700;">كل ثانية بتعدي وانت في قلبي ❤️</p>
+            </div>
+
+            <!-- صورة 1 -->
+            <div class="card-custom">
+                <div class="media-frame">
+                    <img src="WhatsApp Image 2026-10-21 at 8.14.11 PM (1).jpeg" alt="Memory 1">
+                </div>
+                <div class="caption-text">كل سنه وانتي معايا❤️</div>
+            </div>
+
+            <!-- صورة 2 -->
+            <div class="card-custom">
+                <div class="media-frame">
+                    <img src="WhatsApp Image 2026-10-21 at 8.14.11 PM (6).jpeg" alt="Memory 2">
+                </div>
+                <div class="caption-text">ربنا يخليكي ليا ❤️✨</div>
+            </div>
+
+            <!-- صورة 3 -->
+            <div class="card-custom">
+                <div class="media-frame">
+                    <img src="WhatsApp Image 2026-10-21 at 8.14.12 PM (1).jpeg" alt="Memory 3">
+                </div>
+                <div class="caption-text">ضحكتك دي هي كل أماني وراحتي 🥰</div>
+            </div>
+
+            <!-- صورة 4 -->
+            <div class="card-custom">
+                <div class="media-frame">
+                    <img src="WhatsApp Image 2026-10-21 at 8.14.12 PM (2).jpeg" alt="Memory 4">
+                </div>
+                <div class="caption-text">احلي يوم فحياتي وفيه كتي احلي واحده فالعالم ❤️🌍</div>
+            </div>
+
+            <!-- صورة 5 -->
+            <div class="card-custom">
+                <div class="media-frame">
+                    <img src="WhatsApp Image 2026-10-21 at 8.14.13 PM (5).jpeg" alt="Memory 5">
+                </div>
+                <div class="caption-text">أحلى صدفة وأجمل قدر 🌹</div>
+            </div>
+
+            <!-- صورة 6 -->
+            <div class="card-custom">
+                <div class="media-frame">
+                    <img src="WhatsApp Image 2026-10-21 at 8.14.12 PM (4).jpeg" alt="Memory 6">
+                </div>
+                <div class="caption-text">معاكِ كل الأماكن بتنور 🌟</div>
+            </div>
+
+            <!-- صورة 7 -->
+            <div class="card-custom">
+                <div class="media-frame">
+                    <img src="WhatsApp Image 2026-10-21 at 8.14.13 PM (6).jpeg" alt="Memory 7">
+                </div>
+                <div class="caption-text">ومن يومها وانتي اجمل حاجه فحياتي🤍</div>
+            </div>
+
+            <!-- صورة 8 -->
+            <div class="card-custom">
+                <div class="media-frame">
+                    <img src="WhatsApp Image 2026-10-21 at 8.14.13 PM (2).jpeg" alt="Memory 8">
+                </div>
+            </div>
+
+            <!-- صورة 10 -->
+            <div class="card-custom">
+                <div class="media-frame">
+                    <img src="WhatsApp Image 2026-10-21 at 8.14.13 PM (1).jpeg" alt="Memory 10">
+                </div>
+            </div>
+
+            <!-- صورة 13 -->
+            <div class="card-custom">
+                <div class="media-frame">
+                    <img src="WhatsApp Image 2026-10-21 at 8.14.11 PM (2).jpeg" alt="Memory 13">
+                </div>
+                <div class="caption-text">حبيبه انهارده وبكره وكل الايام </div>
+            </div>
+
+            <!-- صورة 14 -->
+            <div class="card-custom">
+                <div class="media-frame">
+                    <img src="WhatsApp Image 2026-10-21 at 8.59.31 PM (2).jpeg" alt="Memory 14">
+                </div>
+                <div class="caption-text">وجودك بيعوضني عن كل حاجة مرّة 🤍</div>
+            </div>
+
+            <!-- صورة 15 -->
+            <div class="card-custom">
+                <div class="media-frame">
+                    <img src="WhatsApp Image 2026-10-21 at 8.59.31 PM (1).jpeg" alt="Memory 15">
+                </div>
+                <div class="caption-text">كل سنة وانتي أقرب لقلبي من نفسي 🎂🎉</div>
+            </div>
+
+            <!-- صورة 16 -->
+            <div class="card-custom">
+                <div class="media-frame">
+                    <img src="WhatsApp Image 2026-10-21 at 8.59.31 PM.jpeg" alt="Memory 16">
+                </div>
+            </div>
+
+            <!-- صورة 17 -->
+            <div class="card-custom">
+                <div class="media-frame">
+                    <img src="WhatsApp Image 2026-10-21 at 8.14.12 PM (3).jpeg" alt="Memory 17">
+                </div>
+                <div class="caption-text">يوم ما مسكت إيدك حسيت بامتلاك الكون 🤝❤️</div>
+            </div>
+
+            <!-- صورة 20 -->
+            <div class="card-custom">
+                <div class="media-frame">
+                    <img src="WhatsApp Image 2026-10-21 at 8.14.11 PM.jpeg" alt="Memory 20">
+                </div>
+                <div class="caption-text">بداية لمليون سنة جاية سوا إن شاء الله ♾️❤️</div>
+            </div>
+
+            <!-- كارت الوعود والعهد -->
+            <div class="card-custom promises-card">
+                <h4 style="text-align:center; color:var(--deep-rose); margin-bottom:12px; font-size: 18px; font-weight:800;">بس عايزك تعرفي! ❤️</h4>
+                <p>• اني هفضل دايماً بحبك</p>
+                <p>• هفضل دايماً أكتر حد بيخاف وهيفضل يخاف عليك</p>
+                <p>• هفضل دايماً بتمنالك كل خير من كل قلبي</p>
+                <p>• انك هتفضلي احلى حاجة حصلتلي ف حياتي ❤️</p>
+                <p>• واني لو اقدر اعمل اي حاجه ف الدنيا عشانك هعملها</p>
+            </div>
+
+            <!-- زر الرسالة السرية الأخير -->
+            <div class="card-custom" style="padding: 25px 15px;">
+                <p style="color:#800f2f; font-weight:700; margin-bottom:12px;">مجهز ليكي رسالة من كل قلبي هنا 👇</p>
+                <button class="message-trigger-btn" onclick="openSecretMessage()">
+                    <i class="fa-solid fa-envelope-open-text"></i>
+                    <span>message 💌</span>
+                </button>
+            </div>
+
+        </div>
+
+        <!-- ================= نافذة الرسالة الختامية (Modal) ================= -->
+        <div class="modal-overlay" id="secretModal">
+            <div class="modal-content">
+                <button class="close-modal-btn" onclick="closeSecretMessage()">✕</button>
+                <div style="font-size: 40px; margin-bottom: 10px;">💌💖</div>
+                <h3 style="color: var(--deep-rose); font-size: 22px; font-weight:800; margin-bottom: 12px;">يا نور عيني وحبيبتي</h3>
+                <p style="color: #590d22; font-size: 15.5px; line-height: 1.9; font-weight: 600;">
+                    مهما هقولك بحبك إزاي مش هوفيكي بحقك أبداً.. 
+                    وجودك في حياتي نعمة وسكينة بشكر ربنا عليها في كل سجدة.. 
+                    معاكِ الدنيا كلها أحلى بكتير ومطمن، ومفيش أي كلام يوصف أنا بحبك قد إيه. 
+                    <br><br>
+                    <b style="color: var(--deep-rose); font-size: 17px;">بحبك أوي يا كل حياتي 💕💍</b>
+                </p>
+                <div class="badge-pill" style="margin-top: 20px;">دايماً سوا وإلى الأبد ♾️❤️</div>
+            </div>
+        </div>
+
+        <!-- ================= 4. مشغل الصوت العائم ================= -->
+        <div class="sticky-player">
+            <div class="player-left">
+                <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=100" class="rotating-disc" id="albumArt" alt="Cover">
+                <div class="song-details">
+                    <div class="song-title">حبك كل يوم بيزيد ❤️</div>
+                    <div class="song-timer" id="timeDisplay">0:00 / 0:34</div>
+                </div>
+            </div>
+            
+            <button class="play-btn-circle" onclick="togglePlayMusic()">
+                <i class="fa-solid fa-play" id="audioIcon"></i>
+            </button>
+
+            <audio id="bgSong" src="music/Albumaty.Com_ramy_sbri_ahsasy_maak.mp3"></audio>
+        </div>
+
+    </div>
+
+    <!-- كود الجافا سكريبت التفاعلي بالكامل -->
+    <script>
+        // 1. توليد قلوب عشوائية متطايرة في الخلفية باستمرار
+        const heartsContainer = document.getElementById('heartsBackground');
+        const heartIcons = ['💖', '💕', '💗', '❤️', '🌸', '✨'];
+
+        function spawnHeart() {
+            const h = document.createElement('div');
+            h.classList.add('floating-heart');
+            h.innerText = heartIcons[Math.floor(Math.random() * heartIcons.length)];
+            h.style.left = Math.random() * 100 + 'vw';
+            h.style.animationDuration = (Math.random() * 3 + 5) + 's';
+            h.style.fontSize = (Math.random() * 15 + 16) + 'px';
+            heartsContainer.appendChild(h);
+
+            setTimeout(() => { h.remove(); }, 8000);
+        }
+        setInterval(spawnHeart, 400);
+
+        // 2. التحقق من كلمة السر
+        function unlockPage() {
+            const entered = document.getElementById('passCode').value.trim().toLowerCase();
+            if (entered === 'love') {
+                document.getElementById('lockScreen').style.display = 'none';
+                document.getElementById('typingScreen').style.display = 'flex';
+                typeWriterEffect();
+                startMusic();
+            } else {
+                alert('الباسورد غير صحيح يا روحي! اكتبي: love ❤️');
+            }
+        }
+
+        // 3. تأثير كتابة النص التلقائي (Typewriter)
+        const romanticMsg = `بحبك يا كل حاجه في حياتي وبما ان ده اول عيد ميلاد من سنين كتير نقضي سوا فحبيت احط كل حاجه بينا هنا تعالي نشوف كل حاجه حلوه بينا بحبك 💖✨|`;
+        let charPos = 0;
+
+        function typeWriterEffect() {
+            const box = document.getElementById('typewriterTarget');
+            if (charPos < romanticMsg.length) {
+                box.textContent += romanticMsg.charAt(charPos);
+                charPos++;
+                setTimeout(typeWriterEffect, 55);
+            } else {
+                document.getElementById('nextToTimelineBtn').style.display = 'inline-block';
+            }
+        }
+
+        function goToTimeline() {
+            document.getElementById('typingScreen').style.display = 'none';
+            document.getElementById('mainTimeline').style.display = 'flex';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 4. عدّاد الوقت الحي (تم التعديل لتاريخ 1-12-2020 بدقة)
+        // شهر 12 يتم تمثيله برقم 11 لأن الشهور تبدأ من صفر
+        const startDate = new Date(2020, 11, 1, 0, 0, 0);
+
+        function refreshCounter() {
+            const now = new Date();
+            const diff = now - startDate;
+
+            if (diff < 0) return;
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const m = Math.floor((diff / (1000 * 60)) % 60);
+            const s = Math.floor((diff / 1000) % 60);
+
+            document.getElementById('d-val').innerText = d;
+            document.getElementById('h-val').innerText = String(h).padStart(2, '0');
+            document.getElementById('m-val').innerText = String(m).padStart(2, '0');
+            document.getElementById('s-val').innerText = String(s).padStart(2, '0');
+        }
+
+        setInterval(refreshCounter, 1000);
+        refreshCounter();
+
+        // 5. فتح وإغلاق نافذة الرسالة المنبثقة
+        function openSecretMessage() {
+            document.getElementById('secretModal').style.display = 'flex';
+            for(let i=0; i<15; i++) {
+                setTimeout(spawnHeart, i * 80);
+            }
+        }
+
+        function closeSecretMessage() {
+            document.getElementById('secretModal').style.display = 'none';
+        }
+
+        // 6. التحكم في مشغل الموسيقى
+        const track = document.getElementById('bgSong');
+        const icon = document.getElementById('audioIcon');
+        const disc = document.getElementById('albumArt');
+        const timerLabel = document.getElementById('timeDisplay');
+
+        function togglePlayMusic() {
+            if (track.paused) {
+                startMusic();
+            } else {
+                stopMusic();
+            }
+        }
+
+        function startMusic() {
+            track.play().then(() => {
+                icon.classList.replace('fa-play', 'fa-pause');
+                disc.style.animationPlayState = 'running';
+            }).catch(() => {
+                console.log('يتطلب تشغيل الصوت نقرة المستخدم أولاً');
+            });
+        }
+
+        function stopMusic() {
+            track.pause();
+            icon.classList.replace('fa-pause', 'fa-play');
+            disc.style.animationPlayState = 'paused';
+        }
+
+        track.ontimeupdate = () => {
+            const curM = Math.floor(track.currentTime / 60);
+            const curS = Math.floor(track.currentTime % 60);
+            const durM = Math.floor(track.duration / 60) || 0;
+            const durS = Math.floor(track.duration % 60) || 0;
+
+            timerLabel.innerText = 
+                `${curM}:${curS < 10 ? '0'+curS : curS} / ${durM}:${durS < 10 ? '0'+durS : durS}`;
+        };
+    </script>
+</body>
+</html>

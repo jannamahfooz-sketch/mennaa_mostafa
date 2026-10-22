@@ -1,0 +1,1 @@
+const startDate = new Date("2020-12-21T00:00:00");
